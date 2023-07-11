@@ -13,16 +13,24 @@ class UserAuthenticator:
         return self.sql_handler.get_user_id_by_email(email)
     
     def authenticate_user(self, email, password):
-        #TODO Check if the user exists and the password is correct
+        hashed_password = hashlib.sha256(password.encode()).hexdigest()
         
-        #TODO Set the authentication status and user ID accordingly
+        user = self.sql_handler.get_user_by_email(email)
         
-        #TODO Return True if the user is authenticated, False Otherwise
-        pass
-    
+        if user is not None and user['password'] == hashed_password:
+            self.authenticated = True
+            self.user_id = user['id']
+            return True
+        else: 
+            self.authenticated = False
+            self.user_id = None
+            return False
+        
+        
+        
     def logout_user(self):
-        #TODO Reset the authentication status and user ID
-        pass
+        self.authenticated = False
+        self.user_id = None
         
     #! Additional Methods for user management
     

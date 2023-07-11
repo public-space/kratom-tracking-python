@@ -1,7 +1,7 @@
 class Menu: 
     def __init__(self):
-        #initialize and necessary attributes
-        pass
+        self.authenticated = False
+    # -------Menu Methods-------
     
     def display_menu(self):
         # Print the menu options
@@ -12,7 +12,7 @@ class Menu:
         print("====================================")
         
     def process_menu_choices(self):
-        # Process the user's choice and execute the corresponding action
+        #! Process the user's choice and execute the corresponding action
         choice = input("Enter your choice: ")
 
         if choice == "1":
@@ -25,12 +25,43 @@ class Menu:
         else:
             print("Invalid choice. Please try again.")
     
+    #! -------Login Methods-------
+    
+    def login(self):
+        email = input("Enter your email: ")
+        password = input("Enter your password: ")
+        
+        authenticated = auth.authenticate_user(email, password)
+        
+        if authenticated: 
+            print("Login Successful!")
+            self.user_id = auth.get_user_id(email)
+            self.authenticated = True
+        else: 
+            print("Login failed. Invalid email or password")
+            
+     #! -------Logout Methods-------
+            
+    def logout(self):
+        auth.logout_user()
+        self.authenticated = False
+        self.user_id = None
+        print("You have been logged out")
+
+    #! -------Dose Methods-------
+    
     def log_dose(self):
-        #TODO Implement this method
+        if not self.authenticated:
+            print("Please login to log a dose")
+            return
+        # TODO: Implement this method
         print("Log Dose")
     
     def view_dose_info(self):
-        #TODO Implement this method
+        if not self.authenticated:
+            print("Please login to view dose info")
+            return
+        # TODO: Implement this method
         print("View Dose Info")
         
-    #TODO Implement other methods for menu operations
+    # TODO: Implement other methods for menu operations
