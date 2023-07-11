@@ -19,4 +19,18 @@ class SQLHandler:
         connection.commit()
         connection.close()
         
-        # Implement other methods for SQL operations
+        
+    def view_tables(self):
+        connection = sqlite3.connect(self.db_path)
+        cursor = connection.cursor()
+        
+        cursor.execute("SELECT name FROM sqlite_master WHERE type='table'")
+        tables = cursor.fetchall()
+        
+        print("Tables: ")
+        for table in tables: 
+            print("- ", table[0])
+            
+        connection.close()
+            
+    #TODO Implement other methods for SQL operations
