@@ -1,4 +1,5 @@
 from functions.menu import Menu
+from functions.user_authentication import UserAuthenticator
 
 def main():
     menu = Menu()

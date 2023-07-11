@@ -9,7 +9,6 @@ class UserAuthenticator:
     def register_user(self, email, password):
         return self.sql_handler.insert_user(email, password)
     
-    
     def get_user_id(self, email):
         return self.sql_handler.get_user_id_by_email(email)
     
