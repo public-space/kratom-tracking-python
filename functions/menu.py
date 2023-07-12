@@ -3,9 +3,10 @@ class Menu:
     """_summary_ 
     This class is responsible for displaying the menu options and processing the user's choice
     """
-    def __init__(self, auth):
+    def __init__(self, auth, sql_handler):
         self.auth = auth
         self.authenticated = False
+        self.sql_handler = sql_handler
     # -------Menu Methods-------
     
     def display_menu(self):
@@ -85,7 +86,7 @@ class Menu:
         else: 
             print("Login failed. Invalid email or password")
             
-     # -------Logout Methods-------
+     #! -------Logout Methods-------
             
     def logout(self):
         self.auth.logout_user()
@@ -99,14 +100,36 @@ class Menu:
         if not self.authenticated:
             print("Please login to log a dose")
             return
-        # TODO: Implement this method
-        print("Log Dose")
+        
+        # Prompt the user to enter the quantity of the dose: 
+        quantity = input("Enter the quantity of the dose: ")
+        
+        # Attempt to convert the quantity to an integer
+        try: 
+            quantity = int(quantity)
+        except ValueError: 
+            print("Invalid quantity. Quantity must be a number.")
+            return
+        
+        # Use the SQLHandler to save the dose information in the database
+        self.sql_handler.insert_dose(self.user_id, quantity)
+    
+        print('Dose logged successfully')
+    
+    #! -------View Dose-------
     
     def view_dose_info(self):
         if not self.authenticated:
             print("Please login to view dose info")
             return
-        # TODO: Implement this method
-        print("View Dose Info")
+        
+       # Use the SQlHandler to retrieve dose information from the database
+        doses = self.sql_handler.get_doses(self.user_id)
+        
+        #print the retrieved dose information
+        for id, time, quantity, in doses:
+            print(f"Dose ID: {id}, Time: {time}, Quantity: {quantity}")
+        
+       
         
     # TODO: Implement other methods for menu operations

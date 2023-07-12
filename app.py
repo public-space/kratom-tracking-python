@@ -1,11 +1,12 @@
 from functions.menu import Menu
 from functions.user_authentication import UserAuthenticator
-
+from functions.sql_handler import SQLHandler
 
 def main():
     
+    sql_handler = SQLHandler("database/kratom.db")
     auth = UserAuthenticator()
-    menu = Menu(auth)
+    menu = Menu(auth, sql_handler)
     
     
     

@@ -8,6 +8,8 @@ class SQLHandler:
     def __init__(self, db_path):
         self.db_path = db_path
         
+    #!------ USER TABLE METHODS ------
+    
     def create_user_table(self):
         connection = sqlite3.connect(self.db_path)
         cursor = connection.cursor()
@@ -73,5 +75,61 @@ class SQLHandler:
         }
         
         return user
-            
+    
+    #!------ DOSE TABLE METHODS ------
+    def create_doses_table(self):
+        #Establish a connection to the database and create a cursor
+        connection = sqlite3.connect(self.db_path)
+        cursor = connection.cursor()
+        
+        #Execute a SQL query to create the doses table
+        cursor.execute("""
+            CREATE TABLE IF NOT EXISTS doses (
+                id INTEGER PRIMARY KEY AUTOINCREMENT, 
+                user_id INTEGER NOT NULL,
+                time DATETIME NOT NULL, 
+                quantity INTEGER NOT NULL, 
+                FOREIGN KEY(user_id) REFERENCES users(id)
+            )
+            """)
+        
+        # Commit the changes and close the connection
+        connection.commit()
+        connection.close()
+        
+    def insert_dose(self, user_id, time, quantity):
+        connection = sqlite3.connect(self.db_path)
+        cursor = connection.cursor()
+        
+        # Execute a SQL query to insert a dose into the doses table
+        cursor.execute("""
+            INSERT INTO doses (user_id, time, quantity)
+            VALUES (?, datetime('now'), ?)
+            """, (user_id, quantity))
+        
+        connection.commit()
+        connection.close()
+        
+    def get_doses(self, user_id):
+        connection = sqlite3.connect(self.db_path)
+        cursor = connection.cursor()
+        
+        #Execute a SQL query to retrieve all doses for a user
+        cursor.execute("""
+            SELECT id, time, quantity
+            FROM doses
+            WHERE user_id = ?           
+            """, (user_id,))
+        
+        # Fetch all the results from the query
+        doses = cursor.fetchall()
+        
+        # Close the connection
+        connection.close()
+        
+        #Return the retrieved doses
+        return doses
+        
+    
+      
     #TODO Implement other methods for SQL operations
