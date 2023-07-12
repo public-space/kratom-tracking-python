@@ -3,15 +3,15 @@ from functions.user_authentication import UserAuthenticator
 
 
 def main():
-    menu = Menu()
     
     auth = UserAuthenticator()
+    menu = Menu(auth)
     
     
     
     while True: 
         if not menu.authenticated:
-            menu.show_login_menu()
+            menu.login_menu()
         else: 
             menu.display_menu()
             menu.process_menu_choices()

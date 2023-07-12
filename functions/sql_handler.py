@@ -2,6 +2,9 @@ import sqlite3
 import hashlib
 
 class SQLHandler:
+    """_summary_
+    This class is responsible for handling SQL operations
+    """
     def __init__(self, db_path):
         self.db_path = db_path
         
@@ -55,15 +58,20 @@ class SQLHandler:
         connection = sqlite3.connect(self.db_path)
         cursor = connection.cursor()
         
-        cursor.execute("SELECT id FROM users WHERE email = ?", (email,))
-        
-        user_id = cursor.fetchone()
+        query = "SELECT id, password FROM users WHERE email = ?"
+        cursor.execute(query, (email,))
+        result = cursor.fetchone()
         
         connection.close()
         
-        if user_id is None: 
+        if result is None:
             return None
-        else: 
-            return user_id[0]
+        
+        user = {
+            'id': result[0],
+            'password': result[1]
+        }
+        
+        return user
             
     #TODO Implement other methods for SQL operations

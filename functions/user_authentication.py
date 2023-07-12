@@ -1,6 +1,11 @@
 from functions.sql_handler import SQLHandler
+import hashlib
 
 class UserAuthenticator: 
+    """_summary_
+    This class is responsible for authenticating users and managing user accounts
+    """
+    
     def __init__(self):
         self.sql_handler = SQLHandler("database/kratom.db")
         self.authenticated = False
@@ -13,19 +18,18 @@ class UserAuthenticator:
         return self.sql_handler.get_user_id_by_email(email)
     
     def authenticate_user(self, email, password):
-        hashed_password = hashlib.sha256(password.encode()).hexdigest()
+        user = self.sql_handler.get_user_id_by_email(email)
         
-        user = self.sql_handler.get_user_by_email(email)
-        
-        if user is not None and user['password'] == hashed_password:
-            self.authenticated = True
-            self.user_id = user['id']
-            return True
-        else: 
-            self.authenticated = False
-            self.user_id = None
+        if user is not None:
+            hashed_password = hashlib.sha256(password.encode()).hexdigest()
+            
+            if user['password'] == hashed_password:
+                self.authenticated = True
+                self.user_id = user['id']
+                return True
+            
             return False
-        
+
         
         
     def logout_user(self):
