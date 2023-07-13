@@ -131,11 +131,14 @@ class Menu:
         
        # Use the SQlHandler to retrieve dose information from the database
         doses = self.sql_handler.get_doses(self.user_id['id'])
+        if not doses: 
+            print("No doses logged yet")
+            return
         
         #print the retrieved dose information
-        for id, time, quantity, in doses:
-            print(f"Dose ID: {id}, Time: {time}, Quantity: {quantity}")
-        
+        print("\n========++++++ Dose History ++++++=======\n")
+        for time, quantity in doses:
+            print(f"Time: {time}     |   Quantity: {quantity}  grams\n")
        
         
     # TODO: Implement other methods for menu operations

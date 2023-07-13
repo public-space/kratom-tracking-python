@@ -116,17 +116,16 @@ class SQLHandler:
         
         #Execute a SQL query to retrieve all doses for a user
         cursor.execute("""
-            SELECT id, time, quantity
+            SELECT strftime('%m-%d-%Y %H:%M', time, 'localtime'),
+            quantity
             FROM doses
-            WHERE user_id = ?           
+            WHERE user_id = ?
+            ORDER BY time DESC
             """, (user_id,))
         
-        # Fetch all the results from the query
         doses = cursor.fetchall()
-        
-        # Close the connection
+
         connection.close()
-        
         #Return the retrieved doses
         return doses
         
