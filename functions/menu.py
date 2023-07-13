@@ -64,9 +64,14 @@ class Menu:
         user_id = self.auth.register_user(email, password)
         
         if user_id: 
-            print("Registration Successful!")
+            print("\n\nRegistration Successful!\n\n")
             self.user_id = user_id
             self.authenticated = True
+            
+            # After registration , automatically log the user in
+            
+            self.login()
+            
         else: 
             print("Registration failed. Please try again.")
             
@@ -83,6 +88,7 @@ class Menu:
             print("Login Successful!")
             self.user_id = self.auth.get_user_id(email)
             self.authenticated = True
+            
         else: 
             print("Login failed. Invalid email or password")
             
@@ -97,7 +103,7 @@ class Menu:
     #! -------Dose Methods-------
     
     def log_dose(self):
-        if not self.authenticated:
+        if not self.authenticated or self.user_id is None:
             print("Please login to log a dose")
             return
         
@@ -110,9 +116,9 @@ class Menu:
         except ValueError: 
             print("Invalid quantity. Quantity must be a number.")
             return
-        
+
         # Use the SQLHandler to save the dose information in the database
-        self.sql_handler.insert_dose(self.user_id, quantity)
+        self.sql_handler.insert_dose(self.user_id['id'], quantity)
     
         print('Dose logged successfully')
     
@@ -124,7 +130,7 @@ class Menu:
             return
         
        # Use the SQlHandler to retrieve dose information from the database
-        doses = self.sql_handler.get_doses(self.user_id)
+        doses = self.sql_handler.get_doses(self.user_id['id'])
         
         #print the retrieved dose information
         for id, time, quantity, in doses:

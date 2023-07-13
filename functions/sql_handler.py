@@ -97,7 +97,7 @@ class SQLHandler:
         connection.commit()
         connection.close()
         
-    def insert_dose(self, user_id, time, quantity):
+    def insert_dose(self, user_id, quantity):
         connection = sqlite3.connect(self.db_path)
         cursor = connection.cursor()
         
@@ -130,6 +130,6 @@ class SQLHandler:
         #Return the retrieved doses
         return doses
         
-    
+   
       
     #TODO Implement other methods for SQL operations
