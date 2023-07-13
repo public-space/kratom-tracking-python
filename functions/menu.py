@@ -1,3 +1,4 @@
+from tabulate import tabulate
 
 class Menu: 
     """_summary_ 
@@ -19,17 +20,20 @@ class Menu:
         
     def process_menu_choices(self):
         # Process the user's choice and execute the corresponding action
-        choice = input("Enter your choice: ")
-
-        if choice == "1":
-            self.log_dose()
-        elif choice == "2":
-            self.view_dose_info()
-        elif choice == "3":
-            print("Exiting the application...")
-            exit()
-        else:
-            print("Invalid choice. Please try again.")
+        try: 
+            choice = input("Enter your choice: ")
+            if choice == "1":
+                self.log_dose()
+            elif choice == "2":
+                self.view_dose_info()
+            elif choice == "3":
+                print("Exiting the application...")
+                exit()
+            else:
+                print("Invalid choice. Please try again.")
+        except Exception as e: 
+            print("Error processing choice: ", e)
+            
             
     def login_menu(self):
         while not self.authenticated:
@@ -136,9 +140,10 @@ class Menu:
             return
         
         #print the retrieved dose information
-        print("\n========++++++ Dose History ++++++=======\n")
+        print("\n============ Dose History =============\n")
         for time, quantity in doses:
             print(f"Time: {time}     |   Quantity: {quantity}  grams\n")
-       
+        
+        print(tabulate(doses, headers=['Time', 'Quantity (g)'], tablefmt='fancy_grid'))
         
     # TODO: Implement other methods for menu operations
